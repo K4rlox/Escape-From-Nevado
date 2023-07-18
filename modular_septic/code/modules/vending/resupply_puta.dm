@@ -37,6 +37,7 @@
 										/obj/item/reagent_containers/syringe/epinephrine,
 										/obj/item/reagent_containers/syringe/atropine,
 										/obj/item/reagent_containers/syringe/antiviral,
+										/obj/item/reagent_containers/syringe/minoxidil,
 										/obj/item/reagent_containers/pill/potassiodide)
 	var/list/stack_type_to_name = list()
 	var/list/medical_stack_type_to_name = list()
