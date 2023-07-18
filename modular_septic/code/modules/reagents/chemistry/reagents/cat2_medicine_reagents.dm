@@ -277,7 +277,7 @@
 	return TRUE
 
 /******ORGAN******/
-/*Suffix: -il*/
+/*(Common) Suffix: -il*/
 
 //penthrite -> minoxidil
 /datum/reagent/medicine/c2/penthrite
