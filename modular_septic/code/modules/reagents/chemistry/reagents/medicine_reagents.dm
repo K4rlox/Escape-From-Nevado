@@ -337,11 +337,11 @@
 		//oops, looks like you have risk factors! vomiting and blood clots
 		if(dr_fauci.diceroll(GET_MOB_ATTRIBUTE_VALUE(dr_fauci, STAT_ENDURANCE)) <= DICE_FAILURE)
 			dr_fauci.vomit(20, TRUE, TRUE)
-			M.add_chem_effect(CE_BLOCKAGE, 25, "[type]")
+			L.add_chem_effect(CE_BLOCKAGE, 25, "[type]")
 
 /datum/reagent/medicine/faucinil/on_mob_end_metabolize(mob/living/L)
 	. = ..()
-	M.remove_chem_effect(CE_BLOCKAGE, "[type]")
+	L.remove_chem_effect(CE_BLOCKAGE, "[type]")
 
 /datum/reagent/medicine/faucinil/overdose_process(mob/living/M, delta_time, times_fired)
 	. = ..()
