@@ -4804,6 +4804,7 @@
 #include "modular_septic\code\modules\clothing\masks\gas_filter.dm"
 #include "modular_septic\code\modules\clothing\masks\gas_masks.dm"
 #include "modular_septic\code\modules\clothing\masks\itobe.dm"
+#include "modular_septic\code\modules\clothing\masks\medical.dm"
 #include "modular_septic\code\modules\clothing\masks\security.dm"
 #include "modular_septic\code\modules\clothing\neck\_neck.dm"
 #include "modular_septic\code\modules\clothing\neck\security.dm"

@@ -31,11 +31,15 @@
 									/obj/item/ammo_box/magazine/ammo_stack/a357/loaded,
 									/obj/item/ammo_box/magazine/ammo_stack/a500/loaded)
 	var/list/dispensible_medical = list(/obj/item/scalpel,
-										/obj/item/reagent_containers/syringe/antiviral,
 										/obj/item/stack/medical/ointment,
 										/obj/item/stack/medical/gauze,
-										/obj/item/reagent_containers/pill/potassiodide,
-										/obj/item/stack/medical/suture/medicated)
+										/obj/item/stack/medical/suture/medicated,
+										/obj/item/reagent_containers/syringe/minoxidil,
+										/obj/item/reagent_containers/syringe/epinephrine,
+										/obj/item/reagent_containers/syringe/atropine,
+										/obj/item/reagent_containers/syringe/antiviral,
+										/obj/item/reagent_containers/syringe/multiver,
+										/obj/item/reagent_containers/pill/potassiodide)
 	var/list/stack_type_to_name = list()
 	var/list/medical_stack_type_to_name = list()
 	var/obj/item/reagent_containers/hypospray/medipen/retractible/blacktar/captagon
@@ -147,9 +151,9 @@
 /obj/machinery/resupply_puta/examine_more(mob/user)
 	. = list()
 	. += span_infoplain("[src] has two functions.")
-	. += span_info(span_alert("The wire on the bottom is called a spendilizer, It can reload magazines by just pressing the wire into the magazine feed all the way to the bottom."))
-	. += span_info(span_alert("There's way to get slugs, buckshot, stacks of revolver ammunition, and medical supplies simply stand near the machine and say the correct words."))
-	. += span_info(span_alert("There's a slot for Captagon's, just place it inside and press the RIGHT (RMB) button to refill it."))
+	. += span_info("The wire on the bottom is called a spendilizer, It can reload magazines by just pressing the wire into the magazine feed all the way to the bottom.")
+	. += span_info("There's way to get slugs, buckshot, stacks of revolver ammunition, and medical supplies simply stand near the machine and say the correct words.")
+	. += span_info("There's a slot for Captagon's, just place it inside and press the RIGHT (RMB) button to refill it.")
 
 /obj/machinery/resupply_puta/process(delta_time)
 	if(!(state_flags & RESUPPLY_READY))
@@ -180,7 +184,7 @@
 		to_chat(user, span_notice("[doingitsthing]"))
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	if(!captagon)
-		to_chat(user, span_warning("Nothing!"))
+		to_chat(user, span_warning("Nothing, fucking lawyer!"))
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	else if(captagon)
 		begin_refill_captagon()
@@ -234,12 +238,12 @@
 		user.put_in_hands(captagon)
 		to_chat(user, span_notice("I take the [captagon] out of the machine."))
 		playsound(src, 'modular_septic/sound/efn/resupply/desert.ogg', 40, FALSE)
-		if(state_flags & RESUPPLY_JUST_FILLED && prob(8))
+		if(prob(8))
 			var/addict_message = list("I'm addicted...", "I'm so fucking gross...", "This IS poison, I'm putting poison inside of MY body...", "It's not MY blood...")
 			to_chat(user, span_warning(addict_message))
-			state_flags &= ~RESUPPLY_JUST_FILLED
-			update_appearance(UPDATE_ICON)
+		state_flags &= ~RESUPPLY_JUST_FILLED
 		captagon = null
+		update_appearance()
 
 /obj/machinery/resupply_puta/proc/spendilize(mob/user, obj/item/ammo_box/magazine)
 	if(!(state_flags & RESUPPLY_READY))
@@ -291,27 +295,27 @@
 	var/list/options = list(
 		"Black Tar",
 		"Pink Turbid",
-		"White Viscous"
+		"White Viscous",
+		"Faucinil",
 	)
 	var/title = "Requires at-least one empty vial."
 	var/message = "The Platter"
 	var/input = tgui_input_list(user, message, title, options)
-	var/datum/liquid_option
+	var/datum/reagent/liquid_option
 	switch(input)
 		if("Black Tar") //regenerator
 			liquid_option = /datum/reagent/medicine/blacktar
-			playsound(src, 'modular_septic/sound/efn/resupply/liquid_fill.ogg', 35, FALSE)
-			playsound(src, 'modular_septic/sound/efn/resupply/buttonpress.ogg', 65, FALSE) // usually you shouldn't add overlapping sounds but this is ok
 		if("Pink Turbid") //reviver
 			liquid_option = /datum/reagent/medicine/pinkturbid
-			playsound(src, 'modular_septic/sound/efn/resupply/liquid_fill.ogg', 35, FALSE)
-			playsound(src, 'modular_septic/sound/efn/resupply/buttonpress.ogg', 65, FALSE)
 		if("White Viscous") //brain fixer
 			liquid_option = /datum/reagent/medicine/whiteviscous
-			playsound(src, 'modular_septic/sound/efn/resupply/liquid_fill.ogg', 35, FALSE)
-			playsound(src, 'modular_septic/sound/efn/resupply/buttonpress.ogg', 65, FALSE)
-	if(!input)
+		if("Faucinil") //disease curer
+			liquid_option = /datum/reagent/medicine/faucinil
+	if(!liquid_option)
 		to_chat(user, span_warning("Nevermind."))
+	else
+		playsound(src, 'modular_septic/sound/efn/resupply/liquid_fill.ogg', 35, FALSE)
+		playsound(src, 'modular_septic/sound/efn/resupply/buttonpress.ogg', 65, FALSE)
 	addtimer(CALLBACK(src, .proc/finalize_refill_captagon, liquid_option), 3 SECONDS)
 	state_flags &= ~RESUPPLY_READY
 
@@ -340,8 +344,9 @@
 	if(left_vial_check)
 		audible_message("[icon2html(src, world)] [src] [verb_say], \"Left vial has been filled.\"")
 		captagon.reagent_holder_left.flags = initial(captagon.reagent_holder_left.flags)
-	captagon.update_appearance(UPDATE_ICON)
-	state_flags |= RESUPPLY_READY
+	state_flags |= RESUPPLY_READY | RESUPPLY_JUST_FILLED
+	captagon.update_appearance()
+	update_appearance()
 	playsound(src, 'modular_septic/sound/efn/captagon/heroin_fill.ogg', 65, FALSE)
 
 /obj/machinery/resupply_puta/proc/donehere(mob/user)
