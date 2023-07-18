@@ -93,15 +93,10 @@
 /datum/component/poopmadness/proc/consume_blood(obj/item/source, atom/target, mob/user, proximity_flag)
 	jumpscare.flash_scare(user, null)
 	var/obj/effect/decal/cleanable/bloody = target
-	if(!bloody.bloodiness)
-		qdel(bloody)
-		playsound(source, 'modular_septic/sound/insanity/poopmadness/pm9alarm.ogg', 80, vary = FALSE)
-		return COMPONENT_CANCEL_ATTACK_CHAIN
-
 	var/obj/item/gun/ballistic/evil_gun = parent
 	if(evil_gun.magazine && bloody.bloodiness)
 		var/amount_fed = 0
-		for(var/i in 1 to min(bloody.bloodiness, evil_gun.magazine.max_ammo - evil_gun.magazine.ammo_count(countempties = FALSE)))
+		for(var/i in 1 to min(max(bloody.bloodiness, 1), evil_gun.magazine.max_ammo - evil_gun.magazine.ammo_count(countempties = FALSE)))
 			var/casing = new ammo_type
 			if(!evil_gun.magazine.give_round(casing, replace_spent = TRUE))
 				qdel(casing)
