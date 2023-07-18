@@ -305,7 +305,7 @@
 	description = "Faucinil is an experimental antiviral drug capable of curing most diseases."
 	color = "#00ff119a" //glistening, bone chilling gemerald
 	metabolization_rate = REAGENTS_METABOLISM
-	overdose_threshold = OVERDOSE_STANDARD
+	overdose_threshold = 51
 	ph = 8
 	/// Current lyrics index
 	var/current_lyric = 1
@@ -329,16 +329,12 @@
 		var/mob/living/carbon/dr_fauci = L
 		for(var/datum/disease/covid as anything in dr_fauci.diseases)
 			covid.cure()
+	//causes blood clots
+	M.add_chem_effect(CE_BLOCKAGE, 25, "[type]")
 
 /datum/reagent/medicine/faucinil/on_mob_end_metabolize(mob/living/L)
 	. = ..()
 	M.remove_chem_effect(CE_BLOCKAGE, "[type]")
-
-
-/datum/reagent/medicine/faucinil/overdose_start(mob/living/M)
-	. = ..()
-	//causes blood clots on overdose
-	M.add_chem_effect(CE_BLOCKAGE, 25, "[type]")
 
 /datum/reagent/medicine/faucinil/overdose_process(mob/living/M, delta_time, times_fired)
 	. = ..()
@@ -347,6 +343,9 @@
 		current_lyric++
 	else
 		ADJUSTBRAINLOSS(M, 25 * REM * delta_time)
+		if(iscarbon(M))
+			var/mob/living/carbon/dr_fauci = M
+			dr_fauci.set_heartattack(TRUE)
 
 //Black Tar Heroin
 /datum/reagent/medicine/blacktar
