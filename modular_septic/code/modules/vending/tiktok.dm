@@ -55,18 +55,20 @@
 	COOLDOWN_DECLARE(refuse_cooldown)
 
 /obj/machinery/vending/tiktok/attackby(obj/item/I, mob/living/user, params)
-	. = ..()
-	if(!GLOB.bartering_inputs[I.type])
-		if(COOLDOWN_FINISHED(src, refuse_cooldown))
+	if(IS_NOT_HARM_INTENT(user))
+		if(!GLOB.bartering_inputs[I.type])
+			if(COOLDOWN_FINISHED(src, refuse_cooldown))
+				sound_hint()
+				playsound(src, 'modular_septic/sound/effects/clunk.wav', 60, vary = FALSE)
+				COOLDOWN_START(src, refuse_cooldown, refuse_sound_cooldown_duration)
+			return
+		if(user.transferItemToLoc(I, src))
 			sound_hint()
-			playsound(src, 'modular_septic/sound/effects/clunk.wav', 60, vary = FALSE)
-			COOLDOWN_START(src, refuse_cooldown, refuse_sound_cooldown_duration)
-		return
-	if(user.transferItemToLoc(I, src))
-		sound_hint()
-		playsound(src, crushersound, 70, vary = FALSE)
-		INVOKE_ASYNC(src, .proc/crushing_animation)
-		check_bartering()
+			playsound(src, crushersound, 70, vary = FALSE)
+			INVOKE_ASYNC(src, .proc/crushing_animation)
+			check_bartering()
+			return
+	return ..()
 
 /obj/machinery/vending/tiktok/MouseDrop(atom/over, src_location, over_location, src_control, over_control, params)
 	. = ..()
