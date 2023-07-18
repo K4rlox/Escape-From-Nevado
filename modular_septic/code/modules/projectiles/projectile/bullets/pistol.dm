@@ -27,10 +27,10 @@
 
 /obj/projectile/bullet/c9mm/evil
 	name = "evil 9mm bullet"
-	damage = 35
-	organ_bonus = 25
-	bare_organ_bonus = 25
-	armor_damage_modifier = 30
+	damage = 40
+	organ_bonus = 30
+	bare_organ_bonus = 30
+	armor_damage_modifier = 60
 	embedding = list("embed_chance"=10, \
 					"fall_chance"=0, \
 					"jostle_chance"=5, \
