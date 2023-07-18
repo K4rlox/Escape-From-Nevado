@@ -240,7 +240,7 @@
 		playsound(src, 'modular_septic/sound/efn/resupply/desert.ogg', 40, FALSE)
 		if(prob(8))
 			var/addict_message = list("I'm addicted...", "I'm so fucking gross...", "This IS poison, I'm putting poison inside of MY body...", "It's not MY blood...")
-			to_chat(user, span_warning(addict_message))
+			to_chat(user, span_warning(pick(addict_message)))
 		state_flags &= ~RESUPPLY_JUST_FILLED
 		captagon = null
 		update_appearance()
