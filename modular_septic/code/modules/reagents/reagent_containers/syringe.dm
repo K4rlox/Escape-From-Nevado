@@ -131,7 +131,7 @@
 
 /obj/item/reagent_containers/syringe/antiviral
 	name = "penicillin syringe"
-	desc = "Contains a common antibiotic, penicilin."
+	desc = "Contains a common antibiotic, penicillin."
 	list_reagents = list(/datum/reagent/medicine/spaceacillin = 15)
 
 /obj/item/reagent_containers/syringe/copium
@@ -141,7 +141,12 @@
 	custom_premium_price = PAYCHECK_HARD * 3
 	list_reagents = list(/datum/reagent/medicine/copium = 15)
 
+/obj/item/reagent_containers/syringe/atropine
+	name = "syringe (atropine)"
+	desc = "Contains epinephrine - Used to stabilize patients."
+	list_reagents = list(/datum/reagent/medicine/atropine = 15)
+
 /obj/item/reagent_containers/syringe/morphine
 	name = "syringe (morphine)"
-	desc = "Contains morphine."
+	desc = "Contains morphine, a strong painkiller."
 	list_reagents = list(/datum/reagent/medicine/morphine = 15)

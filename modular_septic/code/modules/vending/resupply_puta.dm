@@ -31,11 +31,13 @@
 									/obj/item/ammo_box/magazine/ammo_stack/a357/loaded,
 									/obj/item/ammo_box/magazine/ammo_stack/a500/loaded)
 	var/list/dispensible_medical = list(/obj/item/scalpel,
-										/obj/item/reagent_containers/syringe/antiviral,
 										/obj/item/stack/medical/ointment,
 										/obj/item/stack/medical/gauze,
-										/obj/item/reagent_containers/pill/potassiodide,
-										/obj/item/stack/medical/suture/medicated)
+										/obj/item/stack/medical/suture/medicated,
+										/obj/item/reagent_containers/syringe/epinephrine,
+										/obj/item/reagent_containers/syringe/atropine,
+										/obj/item/reagent_containers/syringe/antiviral,
+										/obj/item/reagent_containers/pill/potassiodide)
 	var/list/stack_type_to_name = list()
 	var/list/medical_stack_type_to_name = list()
 	var/obj/item/reagent_containers/hypospray/medipen/retractible/blacktar/captagon

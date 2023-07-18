@@ -64,7 +64,7 @@
 //aiuri -> naproxane
 /datum/reagent/medicine/c2/aiuri
 	name = "Naproxane"
-	description = "Naproxane is an anti-inflammatory and burn reliever opioid."
+	description = "Naproxane is a slight painkiller and burn reliever opioid."
 	reagent_state = LIQUID
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
 	metabolization_rate = REAGENTS_METABOLISM
@@ -253,7 +253,7 @@
 //probital -> dicorderal
 /datum/reagent/medicine/c2/probital
 	name = "Dicorderal"
-	description = "Heals both brute and burn damage, but rather slowly."
+	description = "A slight painkiller that heals both brute and burn damage, but rather slowly."
 	color = "#c15aec"
 	reagent_state = LIQUID
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -319,7 +319,7 @@
 /datum/reagent/medicine/c2/seiver
 	name = "Prussian Blue"
 	description = "Originally created as a dye, this chemical can be used to effectively reduce radiation. \
-				Does not act against radiation sickness."
+				However, it does not act against radiation sickness itself."
 	color = "#003053"
 	ph = 6.4
 	reagent_state = LIQUID

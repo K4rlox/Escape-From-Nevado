@@ -107,7 +107,7 @@
 		M.drowsyness = max(M.drowsyness, 5)
 	return TRUE
 
-//Pulse increase and painkiller
+//Pulse increase and painkiller (unused right now)
 /datum/reagent/determination
 	name = "Adrenaline"
 	description = "Adrenaline is a hormone used as a drug to treat cardiac arrest and other cardiac dysrhythmias resulting in diminished or absent cardiac output."
@@ -144,14 +144,14 @@
 
 /datum/reagent/medicine/endorphin/on_mob_metabolize(mob/living/carbon/M)
 	. = ..()
-	M.add_chem_effect(CE_PAINKILLER, 20, "[type]")
+	M.add_chem_effect(CE_PAINKILLER, 25, "[type]")
 
 /datum/reagent/medicine/endorphin/on_mob_end_metabolize(mob/living/carbon/M)
 	. = ..()
-	M.remove_chem_effect(CE_PAINKILLER, 20, "[type]")
+	M.remove_chem_effect(CE_PAINKILLER, 25, "[type]")
 
 /datum/reagent/medicine/endorphin/overdose_start(mob/living/M)
-	to_chat(M, span_userdanger("I feel EUPHORIC!"))
+	to_chat(M, span_flashinguserdanger("I feel EUPHORIC!"))
 	SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "[type]_overdose", /datum/mood_event/endorphin_enlightenment, name)
 
 /datum/reagent/medicine/endorphin/overdose_process(mob/living/M, delta_time, times_fired)
@@ -302,11 +302,16 @@
 //Antiviral
 /datum/reagent/medicine/faucinil
 	name = "Faucinil"
-	description = "Faucinil is an experimental antiviral drug capable of curing most diseases."
+	description = "Faucinil is an experimental antiviral drug capable of curing most diseases. \
+				Known to cause arterial blockages on risk populations. \
+				Overdosing is also known to cause severe, life threatening autism."
 	color = "#00ff119a" //glistening, bone chilling gemerald
-	metabolization_rate = REAGENTS_METABOLISM
+	reagent_state = LIQUID
+	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
+	metabolization_rate = REAGENTS_METABOLISM * 3 //very fast metabolism
 	overdose_threshold = 51
 	ph = 8
+	self_consuming = TRUE //Does not get processed by the liver
 	/// Current lyrics index
 	var/current_lyric = 1
 	/// Lyrics that get said while overdosing
@@ -329,8 +334,10 @@
 		var/mob/living/carbon/dr_fauci = L
 		for(var/datum/disease/covid as anything in dr_fauci.diseases)
 			covid.cure()
-	//causes blood clots
-	M.add_chem_effect(CE_BLOCKAGE, 25, "[type]")
+		//oops, looks like you have risk factors! vomiting and blood clots
+		if(dr_fauci.diceroll(GET_MOB_ATTRIBUTE_VALUE(dr_fauci, STAT_ENDURANCE)) <= DICE_FAILURE)
+			dr_fauci.vomit(20, TRUE, TRUE)
+			M.add_chem_effect(CE_BLOCKAGE, 25, "[type]")
 
 /datum/reagent/medicine/faucinil/on_mob_end_metabolize(mob/living/L)
 	. = ..()
@@ -338,6 +345,9 @@
 
 /datum/reagent/medicine/faucinil/overdose_process(mob/living/M, delta_time, times_fired)
 	. = ..()
+	//headrape if risk factors
+	if(M.diceroll(GET_MOB_ATTRIBUTE_VALUE(M, STAT_ENDURANCE)) <= DICE_FAILURE)
+		M.HeadRape(2 SECONDS * delta_time)
 	if(current_lyric <= length(lyrics))
 		M.say(lyrics[current_lyric])
 		current_lyric++
@@ -389,12 +399,12 @@
 	if(iscarbon(L) && !HAS_TRAIT(L, TRAIT_HEROIN_JUNKIE))
 		var/mob/living/carbon/C = L
 		if(C.diceroll(GET_MOB_ATTRIBUTE_VALUE(C, STAT_ENDURANCE)) <= DICE_FAILURE)
-			C.vomit(20, TRUE, FALSE)
+			C.vomit(20, TRUE, TRUE)
 
 //Pink Turbid
 /datum/reagent/medicine/pinkturbid
 	name = "Pink Turbid"
-	description = "A Pink, unpleasent smelling liquid"
+	description = "A pink, unpleasent smelling liquid"
 	ph = 6.9
 	reagent_state = LIQUID
 	chemical_flags = REAGENT_CAN_BE_SYNTHESIZED
@@ -404,21 +414,13 @@
 	color = "#FF69B4"
 	overdose_threshold = 51
 
-/datum/reagent/medicine/pinkturbid/overdose_start(mob/living/M)
-	. = ..()
-	if(!iscarbon(M))
-		return
-	var/mob/living/carbon/C = M
-	C.HeadRape(4 SECONDS)
-	addtimer(CALLBACK(C, /mob/living.proc/Stun, 10, TRUE, TRUE), 10)
-
 /datum/reagent/medicine/pinkturbid/expose_mob(mob/living/carbon/exposed_mob, methods=INJECT, reac_volume)
 	if(exposed_mob.stat != DEAD && exposed_mob.pulse > 0)
 		return ..()
 	if(exposed_mob.suiciding)
 		return
 	var/amount_to_revive = round((exposed_mob.getBruteLoss()+exposed_mob.getFireLoss())/20)
-	var/excess_healing = 5*(reac_volume-amount_to_revive) //excess turbid will heal blood and organs across the board, carryover from strange reagent
+	var/excess_healing = 5 * (reac_volume-amount_to_revive) //excess turbid will heal blood and organs across the board, carryover from strange reagent
 	exposed_mob.visible_message(span_warning("[exposed_mob] <b>shakes!</b>"))
 	playsound(exposed_mob, 'modular_septic/sound/effects/revival.ogg', 45, FALSE)
 	exposed_mob.do_jitter_animation(10)
@@ -432,13 +434,21 @@
 	..()
 	. = TRUE
 
+/datum/reagent/medicine/pinkturbid/overdose_start(mob/living/M)
+	. = ..()
+	if(!iscarbon(M))
+		return
+	var/mob/living/carbon/C = M
+	C.HeadRape(4 SECONDS)
+	addtimer(CALLBACK(C, /mob/living.proc/Stun, 10, TRUE, TRUE), 4 SECONDS)
+
 //white viscous
 /datum/reagent/medicine/whiteviscous
 	name = "White Viscous"
-	description = "Powerful Nootropic"
+	description = "Extremely powerful nootropic agent."
 	ph = 6.9
 	reagent_state = GAS
-	metabolization_rate = REAGENTS_METABOLISM*3
+	metabolization_rate = REAGENTS_METABOLISM * 3 //very fast metabolism
 	self_consuming = TRUE //Does not get processed by the liver
 	color = "#FBFBFD"
 	overdose_threshold = 51
@@ -446,20 +456,21 @@
 /datum/reagent/medicine/whiteviscous/on_mob_life(mob/living/carbon/owner, delta_time, times_fired)
 	owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, -6 * REM * delta_time * normalise_creation_purity())
 	owner.jitteriness = 0
-	if(owner.has_dna())
-		owner.dna.remove_all_mutations(list(MUT_NORMAL, MUT_EXTRA), TRUE)
-		owner.cure_all_traumas(TRAUMA_RESILIENCE_ABSOLUTE)
+	if(DT_PROB(5, delta_time))
+		owner.cure_all_traumas(TRAUMA_RESILIENCE_LOBOTOMY)
+		if(owner.has_dna())
+			owner.dna.remove_all_mutations(list(MUT_NORMAL, MUT_EXTRA), TRUE)
 
-	..()
+	return ..()
 
 //Copium
 /datum/reagent/medicine/copium
 	name = "Copium"
 	description = "The strongest painkiller. \
 				Highly addictive, easily overdoseable at 15u."
-	ph = 6.9
+	ph = 6.9 // nice
 	reagent_state = GAS
-	metabolization_rate = REAGENTS_METABOLISM*0.5
+	metabolization_rate = REAGENTS_METABOLISM * 0.25 //slow metabolism
 	self_consuming = TRUE //Does not get processed by the liver
 	color = "#d364ff"
 	overdose_threshold = 15
@@ -489,7 +500,7 @@
 
 //Radiation sickness medication
 /datum/reagent/medicine/potass_iodide
-	description = "A chemical used to treat radiation sickness, effectively working as a stopgap while the radiation is being flushed away. \
+	description = "A chemical used to halt radiation sickness, effectively working as a stopgap while the radiation is being flushed away. \
 				Will not work if the patient is in the late stages of radiation sickness."
 
 /datum/reagent/medicine/potass_iodide/on_mob_metabolize(mob/living/L)
