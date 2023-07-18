@@ -299,6 +299,55 @@
 		carbon_mob.immunity -= 75
 	M.remove_chem_effect(CE_ANTIBIOTIC, "[type]")
 
+//Antiviral
+/datum/reagent/medicine/faucinil
+	name = "Faucinil"
+	description = "Faucinil is an experimental antiviral drug capable of curing most diseases."
+	color = "#00ff119a" //glistening, bone chilling gemerald
+	metabolization_rate = REAGENTS_METABOLISM
+	overdose_threshold = OVERDOSE_STANDARD
+	ph = 8
+	/// Current lyrics index
+	var/current_lyric = 1
+	/// Lyrics that get said while overdosing
+	var/static/list/lyrics = list(
+		"Dr. Fauci",
+		"Give us vaccines",
+		"Help all the people who have been quarantined",
+		"We'll wear our masks and we'll have to stay distant",
+		"We'll wash our hands and we'll be more resistant!",
+		"Fauci! (Yes?)",
+		"Promise us, please!",
+		"We'll have a cure that can fight off this disease!",
+		"Restrictions will lift with some ease!",
+		"Dr. Fauci, don't forget me!",
+	)
+
+/datum/reagent/medicine/faucinil/on_mob_metabolize(mob/living/L)
+	. = ..()
+	if(iscarbon(L))
+		var/mob/living/carbon/dr_fauci = L
+		for(var/datum/disease/covid as anything in dr_fauci.diseases)
+			covid.cure()
+
+/datum/reagent/medicine/faucinil/on_mob_end_metabolize(mob/living/L)
+	. = ..()
+	M.remove_chem_effect(CE_BLOCKAGE, "[type]")
+
+
+/datum/reagent/medicine/faucinil/overdose_start(mob/living/M)
+	. = ..()
+	//causes blood clots on overdose
+	M.add_chem_effect(CE_BLOCKAGE, 25, "[type]")
+
+/datum/reagent/medicine/faucinil/overdose_process(mob/living/M, delta_time, times_fired)
+	. = ..()
+	if(current_lyric <= length(lyrics))
+		M.say(lyrics[current_lyric])
+		current_lyric++
+	else
+		ADJUSTBRAINLOSS(M, 25 * REM * delta_time)
+
 //Black Tar Heroin
 /datum/reagent/medicine/blacktar
 	name = "Black Tar Heroin"

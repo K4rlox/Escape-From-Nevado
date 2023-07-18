@@ -234,12 +234,12 @@
 		user.put_in_hands(captagon)
 		to_chat(user, span_notice("I take the [captagon] out of the machine."))
 		playsound(src, 'modular_septic/sound/efn/resupply/desert.ogg', 40, FALSE)
-		if(state_flags & RESUPPLY_JUST_FILLED && prob(8))
+		if(prob(8))
 			var/addict_message = list("I'm addicted...", "I'm so fucking gross...", "This IS poison, I'm putting poison inside of MY body...", "It's not MY blood...")
 			to_chat(user, span_warning(addict_message))
-			state_flags &= ~RESUPPLY_JUST_FILLED
-			update_appearance(UPDATE_ICON)
+		state_flags &= ~RESUPPLY_JUST_FILLED
 		captagon = null
+		update_appearance()
 
 /obj/machinery/resupply_puta/proc/spendilize(mob/user, obj/item/ammo_box/magazine)
 	if(!(state_flags & RESUPPLY_READY))
@@ -310,6 +310,10 @@
 			liquid_option = /datum/reagent/medicine/whiteviscous
 			playsound(src, 'modular_septic/sound/efn/resupply/liquid_fill.ogg', 35, FALSE)
 			playsound(src, 'modular_septic/sound/efn/resupply/buttonpress.ogg', 65, FALSE)
+		if("Faucinil") //disease curer
+			liquid_option = /datum/reagent/medicine/faucinil
+			playsound(src, 'modular_septic/sound/efn/resupply/liquid_fill.ogg', 35, FALSE)
+			playsound(src, 'modular_septic/sound/efn/resupply/buttonpress.ogg', 65, FALSE)
 	if(!input)
 		to_chat(user, span_warning("Nevermind."))
 	addtimer(CALLBACK(src, .proc/finalize_refill_captagon, liquid_option), 3 SECONDS)
@@ -341,7 +345,7 @@
 		audible_message("[icon2html(src, world)] [src] [verb_say], \"Left vial has been filled.\"")
 		captagon.reagent_holder_left.flags = initial(captagon.reagent_holder_left.flags)
 	captagon.update_appearance(UPDATE_ICON)
-	state_flags |= RESUPPLY_READY
+	state_flags |= RESUPPLY_READY | RESUPPLY_JUST_FILLED
 	playsound(src, 'modular_septic/sound/efn/captagon/heroin_fill.ogg', 65, FALSE)
 
 /obj/machinery/resupply_puta/proc/donehere(mob/user)

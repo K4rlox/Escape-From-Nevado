@@ -45,6 +45,7 @@
 		/obj/item/clothing/shoes/jackboots = 40,
 		/obj/item/clothing/gloves/color/black = 40,
 		/obj/item/clothing/suit/armor/vest/alt/discrete = 40,
+		/obj/item/clothing/mask/breath/medical/n95 = 40,
 		/obj/item/wrench = 45,
 	)
 	var/list/tiktoklines = list('modular_septic/sound/effects/singer1.wav', 'modular_septic/sound/effects/singer2.wav')
