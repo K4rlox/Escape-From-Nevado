@@ -55,7 +55,8 @@
 	COOLDOWN_DECLARE(refuse_cooldown)
 
 /obj/machinery/vending/tiktok/attackby(obj/item/I, mob/living/user, params)
-	if(IS_NOT_HARM_INTENT(user))
+	var/list/modifiers = params2list(params)
+	if(IS_NOT_HARM_INTENT(user, modifiers))
 		if(!GLOB.bartering_inputs[I.type])
 			if(COOLDOWN_FINISHED(src, refuse_cooldown))
 				sound_hint()
