@@ -12,7 +12,7 @@
 /// Fights off infections
 #define CE_ANTIBIOTIC "antibiotic"
 /// Boosts spleen blood regen
-#define CE_BLOODRESTORE "bloodrestore"
+#define CE_BLOOD_REGEN "blood_regen"
 /// Reduces shock
 #define CE_PAINKILLER "painkiller"
 /// Liver filtering
@@ -32,7 +32,7 @@
 /// Increases blood oxygenation
 #define CE_OXYGENATED "oxygen"
 /// Heals the brain over time
-#define CE_BRAIN_REGEN "brainfix"
+#define CE_BRAIN_REGEN "brain_regen"
 /// Doubles organ healing from all sources
 #define CE_ORGAN_REGEN "organ_regen"
 /// Anti-virus effect

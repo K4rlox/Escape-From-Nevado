@@ -296,10 +296,14 @@
 /datum/reagent/medicine/c2/penthrite/on_mob_metabolize(mob/living/L)
 	. = ..()
 	L.add_chem_effect(CE_PULSE, -1, "[type]")
+	L.add_chem_effect(CE_BLOOD_REGEN, 1, "[type]")
+	L.add_chem_effect(CE_ORGAN_REGEN, 1, "[type]")
 
 /datum/reagent/medicine/c2/penthrite/on_mob_end_metabolize(mob/living/L)
 	. = ..()
 	L.remove_chem_effect(CE_PULSE, "[type]")
+	L.remove_chem_effect(CE_BLOOD_REGEN, "[type]")
+	L.remove_chem_effect(CE_ORGAN_REGEN, "[type]")
 
 /datum/reagent/medicine/c2/penthrite/on_mob_life(mob/living/carbon/M, delta_time, times_fired)
 	. = ..()
