@@ -106,27 +106,27 @@
 
 /obj/item/reagent_containers/syringe/multiver
 	name = "syringe (charcoal)"
-	desc = "Contains charcoal."
+	desc = "Contains activated charcoal, an antitoxin."
 	list_reagents = list(/datum/reagent/medicine/c2/multiver = 15)
 
 /obj/item/reagent_containers/syringe/syriniver
 	name = "syringe (dylovenal)"
-	desc = "Contains dylovenal."
+	desc = "Contains dylovenal, an antitoxin."
 	list_reagents = list(/datum/reagent/medicine/c2/syriniver = 15)
 
 /obj/item/reagent_containers/syringe/minoxidil
 	name = "syringe (minoxidil)"
-	desc = "Contains minoxidil."
+	desc = "Contains minoxidil, a vasodilator."
 	list_reagents = list(/datum/reagent/medicine/c2/penthrite = 15)
 
 /obj/item/reagent_containers/syringe/convermol
 	name = "syringe (formoterol)"
-	desc = "Contains formoterol."
+	desc = "Contains formoterol, a bronchodilator."
 	list_reagents = list(/datum/reagent/medicine/c2/convermol = 15)
 
 /obj/item/reagent_containers/syringe/tirimol
-	name = "syringe (tirimol)"
-	desc = "Contains tirimol."
+	name = "syringe (levalbuterol)"
+	desc = "Contains levalbuterol, a beta agonist capable of efficiently restoring blood oxygenation.."
 	list_reagents = list(/datum/reagent/medicine/c2/tirimol = 15)
 
 /obj/item/reagent_containers/syringe/antiviral
@@ -136,7 +136,7 @@
 
 /obj/item/reagent_containers/syringe/copium
 	name = "syringe (copium)"
-	desc = "Contains copium.\
+	desc = "Contains copium, a powerful but dangerous painkiller.\
 			\n<b>Do not inject more or equal to 15u at once.</b>"
 	custom_premium_price = PAYCHECK_HARD * 3
 	list_reagents = list(/datum/reagent/medicine/copium = 15)
@@ -148,5 +148,5 @@
 
 /obj/item/reagent_containers/syringe/morphine
 	name = "syringe (morphine)"
-	desc = "Contains morphine, a strong painkiller."
+	desc = "Contains morphine, a powerful painkiller."
 	list_reagents = list(/datum/reagent/medicine/morphine = 15)
