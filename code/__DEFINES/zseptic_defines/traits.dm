@@ -69,6 +69,8 @@
 #define TRAIT_DENOMINATOR_REDSCREEN "denominator_shotgunner_hud_effect"
 /// Immune to blacktar overdose as well as vomit
 #define TRAIT_HEROIN_JUNKIE "heroin_junkie"
+/// Immune to faucinil overdose and vomit
+#define TRAIT_FAUCIPILLED "faucipilled"
 
 // ~BODYPART TRAITS
 /// Rotten beyond salvation

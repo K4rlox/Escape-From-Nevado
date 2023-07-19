@@ -335,7 +335,7 @@
 		for(var/datum/disease/covid as anything in dr_fauci.diseases)
 			covid.cure()
 		//oops, looks like you have risk factors! vomiting and blood clots
-		if(dr_fauci.diceroll(GET_MOB_ATTRIBUTE_VALUE(dr_fauci, STAT_ENDURANCE)) <= DICE_FAILURE)
+		if(!HAS_TRAIT(dr_fauci, TRAIT_FAUCIPILLED) && (dr_fauci.diceroll(GET_MOB_ATTRIBUTE_VALUE(dr_fauci, STAT_ENDURANCE)) <= DICE_FAILURE))
 			dr_fauci.vomit(20, TRUE, TRUE)
 			L.add_chem_effect(CE_BLOCKAGE, 25, "[type]")
 
@@ -346,13 +346,14 @@
 /datum/reagent/medicine/faucinil/overdose_process(mob/living/M, delta_time, times_fired)
 	. = ..()
 	//headrape if risk factors
-	if(M.diceroll(GET_MOB_ATTRIBUTE_VALUE(M, STAT_ENDURANCE)) <= DICE_FAILURE)
+	if(!HAS_TRAIT(dr_fauci, TRAIT_FAUCIPILLED) && (M.diceroll(GET_MOB_ATTRIBUTE_VALUE(M, STAT_ENDURANCE)) <= DICE_FAILURE))
 		M.HeadRape(2 SECONDS * delta_time)
 	if(current_lyric <= length(lyrics))
-		M.say(lyrics[current_lyric])
-		current_lyric++
-	else
-		ADJUSTBRAINLOSS(M, 25 * REM * delta_time)
+		if(DT_PROB(20, delta_time))
+			M.say(lyrics[current_lyric])
+			current_lyric++
+	//overdose when the lyrics are done, if you are not fauci's strongest soldier
+	else if(!HAS_TRAIT(M, TRAIT_FAUCIPILLED))
 		if(iscarbon(M))
 			var/mob/living/carbon/dr_fauci = M
 			dr_fauci.set_heartattack(TRUE)
