@@ -346,7 +346,7 @@
 /datum/reagent/medicine/faucinil/overdose_process(mob/living/M, delta_time, times_fired)
 	. = ..()
 	//headrape if risk factors
-	if(!HAS_TRAIT(dr_fauci, TRAIT_FAUCIPILLED) && (M.diceroll(GET_MOB_ATTRIBUTE_VALUE(M, STAT_ENDURANCE)) <= DICE_FAILURE))
+	if(!HAS_TRAIT(M, TRAIT_FAUCIPILLED) && (M.diceroll(GET_MOB_ATTRIBUTE_VALUE(M, STAT_ENDURANCE)) <= DICE_FAILURE))
 		M.HeadRape(2 SECONDS * delta_time)
 	if(current_lyric <= length(lyrics))
 		if(DT_PROB(20, delta_time))
